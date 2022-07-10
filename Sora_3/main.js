@@ -35,7 +35,12 @@ mainScene.create = function () {
     
     //残りライフ
     this.playerlife =3;
-    this.createlifeUI();
+
+    this.lifetext = this.add.text(500,50,'Life: '+this.playerlife,{
+        fontSize: '30px Open Sans',
+        fill: '#03fc90'
+    });
+    this.lifetext.setScrollFactor(0);
     
     // UI作成
  this.createUI();
@@ -161,14 +166,7 @@ mainScene.createUI = function() {
     this.scoreText.setScrollFactor(0);
 };
 
-//ライフの処理
-mainScene.createlifeUI = function() {
-    this.lifetext = this.add.text(500,50,'Life: '+this.playerlife,{
-        fontSize: '30px Open Sans',
-        fill: '#03fc90'
-    });
-    this.lifetext.setScrollFactor(0);
-};
+
 
 mainScene.createCoin = function() {
     // コイン画像の読み込み
@@ -218,7 +216,7 @@ mainScene.createEnemy = function() {
 mainScene.hitEnemy = function(player, enemy) {
     // プレイヤーが敵に衝突
     this.playerlife--;
-    this.createlifeUI();
+    this.lifetext.text='Life: '+this.playerlife;
     if (this.playerlife <= 0){
         this.physics.pause();
         this.player.setTint(0xff0000);
