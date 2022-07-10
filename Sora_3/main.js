@@ -233,6 +233,8 @@ mainScene.hitEnemy = function(player, enemy) {
         loop: false,
         callbackScope: this,
         })
+    }else{
+        enemy.destroy();
     }
 };
 
