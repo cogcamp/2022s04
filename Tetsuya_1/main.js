@@ -83,7 +83,7 @@ mainScene.createBall = function() {
 mainScene.createPaddle = function() {
      // パドル作成
     this.paddle = this.physics.add.image(400,550,'paddle1')
-    this.paddle.setDisplaySize(104,24);
+    this.paddle.setDisplaySize(50,24);
     this.paddle.setImmovable();
     this.paddle.isStart = true;
     this.physics.add.collider(this.paddle,this.ball,this.hitPaddle,null,this);
