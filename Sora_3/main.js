@@ -38,7 +38,7 @@ mainScene.create = function () {
 
     this.lifetext = this.add.text(500,50,'Life: '+this.playerlife,{
         fontSize: '30px Open Sans',
-        fill: '#03fc90'
+        fill: '#5a3fd1'
     });
     this.lifetext.setScrollFactor(0);
     
@@ -232,7 +232,17 @@ mainScene.hitEnemy = function(player, enemy) {
         callbackScope: this,
         })
     }else{
+        this.player.setTint(0xff0000);
         enemy.destroy();
+        this.time.addEvent({
+            delay: 1000,
+            callback: function(){},
+            loop: false,
+            callbackScope: this,
+        })
+        //delay: 500,
+        this.player.clearTint();
+        
     }
 };
 
