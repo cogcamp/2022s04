@@ -76,12 +76,16 @@ mainScene.update = function() {
         this.player.direction="right";
         //方向を右にする
     }else{
-    //カーソルキー離すと停止
+    //右左カーソルキー離すと停止
         this.player.body.setVeLocityX(0);
-        //走る
+        //走るスピードを0にする
         this.player.anims.stop();
         }
-    
+        //上カーソルキー
+        if(this.cursors.up.isDown&&this.player.body.onfloor() ){
+            this.player.body.setVelocityY(-this.jumpPower);
+        }
+        this.player.b
 };
 
 // マップ表示
