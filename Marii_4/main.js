@@ -55,10 +55,10 @@ mainScene.update = function() {
 };
 mainScene.config = function() {
     // 背景色の設定
-    this.cameras.main.setBackgroundColor('#cccccc');
+    this.cameras.main.setBackgroundColor('#345671');
     
     // パドルの移動速度
-    this.paddleSpeed = 10;
+    this.paddleSpeed = 15;
     
     // ボール発射の加速度
     this.ballSpeedX = 0;
@@ -101,7 +101,7 @@ mainScene.hitPaddle = function (paddle, ball) {
 
 mainScene.createBlocks = function() {
     // 横10列、縦6行並べる
-    var blockColors = ['red1', 'green1', 'yellow1', 'silver1', 'blue1', 'purple1' ];
+    var blockColors = ['red1', 'green1', 'yellow1', 'silver1', 'blue1', 'purple1', 'blue2', 'green2'];
     this.blocks = this.physics.add.staticGroup();
     for(var i = 0; i< 8; i++){
     for(var j = 0; j < 10; j++) {
