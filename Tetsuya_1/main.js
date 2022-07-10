@@ -66,7 +66,7 @@ mainScene.config = function() {
     
     // ボール発射の加速度
     this.ballSpeedX = 60;
-    this.ballSpeedY = -600;
+    this.ballSpeedY = -450;
     
     // ライフ
     this.life = 3;
@@ -129,7 +129,7 @@ mainScene.createBlocks = function() {
 };
 
 
-mainScene.hitBlock = function (2ball, block) {
+mainScene.hitBlock = function (ball, block) {
     // 衝突したブロックを削除
     block.destroy();
     // ブロックの残りを判定
