@@ -236,12 +236,12 @@ mainScene.hitEnemy = function(player, enemy) {
         enemy.destroy();
         this.time.addEvent({
             delay: 1000,
-            callback: function(){},
+            callback: function(){this.player.clearTint()},
             loop: false,
             callbackScope: this,
         })
         //delay: 500,
-        this.player.clearTint();
+        
         
     }
 };
