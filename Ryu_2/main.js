@@ -105,7 +105,7 @@ mainScene.hitPaddle = function (paddle, ball) {
 
 mainScene.createBlocks = function() {
     // 横10列、縦6行並べる
-    var blockColors = [ 'red1', 'green1', 'yellow', 'silver', 'blue1', 'purple1' ];
+    var blockColors = [ 'yellow1', 'green1', 'yellow1', 'green1', 'yellow1', 'green1' ];
     this.blocks = this.physics.add.staticGroup();
     for(var i = 0; i < 6; i++) {
         for( var j = 0; j < 10; j++) {
@@ -154,7 +154,7 @@ mainScene.failToHit =  function () {
 
 mainScene.gameOver = function() {
     // ゲームオーバー
-    alert("お前下手");
+    alert("Game Over");
     // スタートシーンに移動
     this.scene.start("startScene");
 };
