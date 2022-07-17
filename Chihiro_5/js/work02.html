@@ -27,14 +27,35 @@ mainScene.preload = function() {
 
 mainScene.create = function() {
     // 左側のパーティクル作成
-    
+    this.createParticle1();
     // 右側のパーティクル作成
+    this.createParticle2();
     
+   // this.createParticle3()
 };
 
 mainScene.createParticle1 = function() {
     // 左側のパーティクル作成
-    
+  var x = this.game.config.width / 4
+  //y座標は画面下部
+  var y = this.game.config.height;
+  
+  //パーティクル作成
+  var particles = this.add.particles("heart");
+  //エミッター起動
+  var emitter = particles.createEmitter({
+      x:x,
+      y:y,
+      frame : [0,1,2],
+      speed : {min:300,max:700},
+      scale : {min:0.3,max:0.6},
+      angle : {min:-60,max:-120},
+      rotate : {min:0, max:360},
+      gravityY : 50,
+      frequency : 50,
+      lifespan: 4000,
+      blenMode:"COLOR",
+  })
     
     
 };
@@ -42,7 +63,7 @@ mainScene.createParticle1 = function() {
 mainScene.createParticle2 = function() {
     // 右側のパーティクル作成
     // X座標は画面の2/3の位置
-    var x = this.game.config.width / 3 * 2;
+    var x = this.game.config.width / 4 * 2;
     // Y座標は画面下部
     var y = this.game.config.height;
     
@@ -52,8 +73,8 @@ mainScene.createParticle2 = function() {
     var emitter = particles.createEmitter({
         x: x,
         y: y,
-        frame : [4, 5, 6, 7],
-        speed: { min: 200, max: 500 },
+        frame : [3,4, 5],
+        speed: { min: 300, max: 700 },
         scale: { min: 0.3, max: 0.6 },
         angle: { min: -60, max: -120 },
         rotate: { min: 0,  max: 360},
@@ -63,6 +84,29 @@ mainScene.createParticle2 = function() {
         blendMode: 'COLOR',
     });
 };
+
+/*mainScene.createParticle3 = function(){
+    var x = this.game.config.width / 4 * 3;
+    var y = this.game.config.height
+    // パーティクル作成
+    var particles = this.add.particles('heart');
+    // エミッター起動
+    var emitter = particles.createEmitter({
+        x: y,
+        y: x,
+        frame : [6,7,8]
+        speed: { min: 300, max: 700 },
+        
+        scale: { min: 0.3, max: 0.6 },
+        angle: { min: -60, max: -120 },
+        rotate: { min: 0,  max: 360},
+        gravityY : 50,
+        frequency : 50,
+        lifespan: 4000,
+        blendMode: 'COLOR',
+    });
+};*/
+
 
 var config = {
     type: Phaser.AUTO,
