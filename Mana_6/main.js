@@ -1,17 +1,22 @@
 var mainScene = new Phaser.Scene("mainScene");
 
+var lives = 3
+
+
+
 // 初期設定
 mainScene.config = function() {
     // プレイヤーの動く速度
-    this.runSpeed = 300;
+    this.runSpeed = 400;
     // プレイヤーのジャンプパワー
-    this.jumpPower = 500;
+    this.jumpPower = 550;
     // プレイヤーの画像
     this.playerImage = "player1";
     // ゲームオーバーフラグ
     this.isGameOver = false;
     // スコアの初期値
     this.score = 0;
+
     // 敵の配列
     this.enemyData = ['enemy01','enemy02','enemy05','enemy07','enemy08'];
     // 敵のスピードを設定する配列
@@ -40,10 +45,10 @@ mainScene.create = function () {
     this.createCoin();
     
     // 敵作成
-    
+    this.createEnemyGroup();
     
     // ファイヤーグループ作成
-    
+    this.createFireGroup();
     
     // スペースキーでファイヤ発射
     this.input.keyboard.on('keydown-SPACE', function() {
@@ -72,8 +77,12 @@ mainScene.update = function() {
         this.player.anims.stop();
     }
     if (this.cursors.up.isDown && this.player.body.onFloor()) {
-        this.player.body.setVelocityY(-this.jumpPower)
+        this.player.body.setVelocityY(-this.jumpPower);
     }
+    if (this.cursors.down.isDown) {
+        this.player.body.setVelocityY(this.jumpPower);
+    }
+    
     
 };
 
@@ -143,9 +152,16 @@ mainScene.createUI = function() {
         fontSize: "30px Open Sans",
         fill: "#ff0000"
     });
-    //fixes the letters in place, not moving wuth the camera
+    this.livesText = this.add.text(650, 90,"Lives: " + lives, {
+        fontsize: "23px Open Sans" ,
+        fill: "#ff0000"
+    });
+    this.livesText.setScrollFactor(0);
+    //fixes the letters in place, not moving with the camera
     this.scoreText.setScrollFactor(0);
 };
+
+
 
 mainScene.createCoin = function() {
     // コイン画像の読み込み
@@ -156,15 +172,16 @@ mainScene.createCoin = function() {
     this.physics.add.overlap(this.player, this.coinLayer);
     //after bumping into the coin layer
     this.coinLayer.setTileIndexCallback(17, this.collectCoin, this);
-    
-    
+
 };
 
 mainScene.collectCoin = function(sprite, tile) {
     // プレイヤーがコインに衝突
-    
-    
-    
+    this.coinLayer.removeTileAt(tile.x, tile.y);
+    //adds 1 to the score
+    this.score++;
+    //updates the score
+    this.scoreText.setText("Score: " + this.score);
 };
 
 mainScene.createEnemyGroup = function() {
@@ -185,16 +202,42 @@ mainScene.createEnemyGroup = function() {
 
 mainScene.createEnemy = function() {
     // 敵を作成
-    
-    
-    
+    //makes enemies random
+    var enemyType = Phaser.Math.RND.pick(this.enemyData);
+    //makes the x variable random
+    var enemyPositionX = Phaser.Math.RND.between(500, 2000);
+    //makes the enemies
+    var enemy = this.enemies.create(enemyPositionX, 100, enemyType);
+    enemy.body.setSize(350, 350);
+    enemy.setDisplaySize(70, 70);
+    var speed = Phaser.Math.RND.pick(this.enemySpeed);
+    enemy.setVelocityX(speed);
 };
 
 mainScene.hitEnemy = function(player, enemy) {
     // プレイヤーが敵に衝突
-    
-    
-    
+        lives--;
+        enemy.destroy();
+        this.livesText.setText("Lives: " + lives);
+    if (lives == 2) {
+        this.player.setTint(0xfbb9e1);
+    } else if (lives == 1){
+        this.player.setTint(0xcf3476);
+    } else {
+        this.physics.pause();
+        this.player.setTint(0xbe0a);
+        this.player.anims.stop();
+        this.isGameOver = true;
+        this.enemyTimer.remove();
+        //show the game over screen
+        this.gameOverTimer = this.time.addEvent ({
+        delay: 1000,
+        callback: this.gameOver,
+        loop: false,
+        callbackScope: this,
+    });
+    lives = 3
+    }
 };
 
 mainScene.createFireGroup = function() {
@@ -206,16 +249,31 @@ mainScene.createFireGroup = function() {
 
 mainScene.shoot = function() {
     // ファイヤーの作成
-    
-    
-    
+    var x = this.player.body.center.x;
+    var y = this.player.body.center.y;
+    //actually makes the fire
+    var fire = this.fireGroup.create(x, y, 'fire');
+    fire.body.setSize(20, 20);
+    fire.setDisplaySize(80, 80);
+    fire.body.setAllowGravity(false);
+    //the fire speed
+    var speed = 600;
+    //shoots the fire forwards
+   if (this.player.direction == 'left') {
+       fire.setAngle(90);
+       fire.setVelocityX(-speed);
+   } else {
+       fire.setAngle(-90);
+       fire.setVelocityX(speed);
+   }
 };
 
 mainScene.hitFire = function(enemy, fire) {
     // ファイヤーと敵が衝突
-    
-    
-    
+    //destroy the enemy
+    enemy.destroy();
+    //destroy the fire
+    fire.destroy();
 };
 
 mainScene.hitFireGround = function(fire, ground) {
