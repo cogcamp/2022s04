@@ -2,7 +2,7 @@ var mainScene = new Phaser.Scene("mainScene");
 
 var lives = 3
 
-
+var kills = 0
 
 // 初期設定
 mainScene.config = function() {
@@ -20,7 +20,7 @@ mainScene.config = function() {
     // 敵の配列
     this.enemyData = ['enemy01','enemy02','enemy05','enemy07','enemy08'];
     // 敵のスピードを設定する配列
-    this.enemySpeed = [-100,-50,50,100];
+    this.enemySpeed = [-110,-60,60,110];
     // カーソルを取得する
     this.cursors = this.input.keyboard.createCursorKeys();
 };
@@ -76,14 +76,12 @@ mainScene.update = function() {
         this.player.body.setVelocityX(0);
         this.player.anims.stop();
     }
-    if (this.cursors.up.isDown && this.player.body.onFloor()) {
+    if (this.cursors.up.isDown && this.player.body.onFloor()){
         this.player.body.setVelocityY(-this.jumpPower);
     }
     if (this.cursors.down.isDown) {
         this.player.body.setVelocityY(this.jumpPower);
     }
-    
-    
 };
 
 // マップ表示
@@ -153,12 +151,17 @@ mainScene.createUI = function() {
         fill: "#ff0000"
     });
     this.livesText = this.add.text(650, 90,"Lives: " + lives, {
-        fontsize: "23px Open Sans" ,
+        fontSize: "30px Open Sans",
         fill: "#ff0000"
     });
     this.livesText.setScrollFactor(0);
     //fixes the letters in place, not moving with the camera
     this.scoreText.setScrollFactor(0);
+    this.killsText = this.add.text(40,50,"Kills: " + kills, {
+        fontSize: "30px Open Sans",
+        fill: "#ff0000"
+    });
+    this.killsText.setScrollFactor(0);
 };
 
 
@@ -182,7 +185,7 @@ mainScene.collectCoin = function(sprite, tile) {
     this.score++;
     //updates the score
     this.scoreText.setText("Score: " + this.score);
-};
+    };
 
 mainScene.createEnemyGroup = function() {
     // 敵グループ作成
@@ -225,7 +228,7 @@ mainScene.hitEnemy = function(player, enemy) {
         this.player.setTint(0xcf3476);
     } else {
         this.physics.pause();
-        this.player.setTint(0xbe0a);
+        this.player.setTint(0x00000);
         this.player.anims.stop();
         this.isGameOver = true;
         this.enemyTimer.remove();
@@ -274,7 +277,11 @@ mainScene.hitFire = function(enemy, fire) {
     enemy.destroy();
     //destroy the fire
     fire.destroy();
+    kills++;
+    this.killsText.setText("Kills: " + kills);
 };
+
+
 
 mainScene.hitFireGround = function(fire, ground) {
     // ファイヤーと地面が衝突
@@ -293,4 +300,5 @@ mainScene.gameOver = function() {
     this.input.keyboard.on('keydown', function(event) {
         this.scene.start('startScene');
     }, this);
+    kills = 0;
 };
