@@ -218,9 +218,11 @@ mainScene.hitEnemy = function(player, enemy) {
     if(this.life >=1) {
         this.life--;
         this.lifeText.setText('Life ' + this.life);
+            this.player.setTint( 0xff0000 );
+
     } else {
     this.physics.pause();
-    this.player.setTint( 0xff0000 );
+    this.player.setTint( 0xdc143c );
     this.player.anims.stop();
     this.isGameOver = true;
     this.enemyTimer.remove();
