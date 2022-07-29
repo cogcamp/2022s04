@@ -143,10 +143,15 @@ mainScene.createPlayer = function() {
 
 mainScene.createUI = function() {
     // 画面右上にスコアを表示する
+   if(this.score >= 300) {
+        this.scoreText.setText('Clear Score ' +this.score);
+   } else {
+   
    this.scoreText = this.add.text(500, 50, 'Score: ' + this.score, {
      fontSize: '30px Open Sans' ,
    fill: '#ffd700'
    });
+   }
    this.lifeText = this.add.text(650,20,'Life ' + this.life, {
             fontSize: '30px Open Sans' ,
    fill: '#ff0000'
