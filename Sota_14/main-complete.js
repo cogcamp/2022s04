@@ -13,7 +13,7 @@ mainScene.config = function() {
     // スコアの初期値
     this.score = 0;
     // 敵の配列
-    this.enemyData = ['enemy01','enemy02','enemy05','enemy07','enemy08'];
+    this.enemyData = ['enemy01','enemy02','enemy03','enemy05','enemy07','enemy08'];
     // 敵のスピードを設定する配列
     this.enemySpeed = [-100,-50,50,100];
     // カーソルを取得する

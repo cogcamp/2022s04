@@ -13,11 +13,12 @@ mainScene.config = function() {
     // スコアの初期値
     this.score = 0;
     // 敵の配列
-    this.enemyData = ['enemy01','enemy02','enemy05','enemy07','enemy08'];
+    this.enemyData = ['enemy01','enemy02','enemy03','enemy05','enemy07','enemy08'];
     // 敵のスピードを設定する配列
-    this.enemySpeed = [-100,-50,50,100];
+    this.enemySpeed = [200,200,200,200];
     // カーソルを取得する
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.life =2;
 };
 
 mainScene.create = function () {
@@ -28,22 +29,25 @@ mainScene.create = function () {
     this.cameras.main.setBackgroundColor('#99CCFF');
     
     // マップ表示
-    this.createMap();
+    this.createMap();   
     
     // プレイヤー作成
     this.createPlayer();
     
     // UI作成
+    this.createUI();
     
     
     // コイン作成
-    
+    this.createCoin();
+
     
     // 敵作成
+    this.createEnemyGroup();
     
     
     // ファイヤーグループ作成
-    
+    this.createFireGroup();
     
     // スペースキーでファイヤ発射
     this.input.keyboard.on('keydown-SPACE', function() {
@@ -56,7 +60,23 @@ mainScene.update = function() {
     if(this.isGameOver) {
         return false;
     }
-    
+    if(this.cursors.left.isDown) {
+        this.player.body.setVelocityX(-this.runSpeed);
+        this.player.anims.play('walk',true);
+        this.player.flipX = true;
+        this.player.direction = 'left';
+    } else if(this.cursors.right.isDown) {
+        this.player.body.setVelocityX(this.runSpeed);
+        this.player.anims.play('walk',true);
+        this.player.flipX = false;
+       this.player.direction = 'right';
+    } else {
+        this.player.body.setVelocityX(0)
+        this.player.anims.stop();
+    }
+    if(this.cursors.up.isDown && this.player.body.onFloor()) {
+        this.player.body.setVelocityY(-this.jumpPower);
+    }
     
     
 };
@@ -123,13 +143,27 @@ mainScene.createPlayer = function() {
 
 mainScene.createUI = function() {
     // 画面右上にスコアを表示する
+   this.scoreText = this.add.text(500, 50, 'Score: ' + this.score, {
+     fontSize: '30px Open Sans' ,
+   fill: '#ffd700'
+   });
+   this.lifeText = this.add.text(650,20,'Life ' + this.life, {
+            fontSize: '30px Open Sans' ,
+   fill: '#ff0000'
+
     
-    
-    
+    });
+this.scoreText.setScrollFactor(0);
+
+this.lifeText.setScrollFactor(0);
 };
 
 mainScene.createCoin = function() {
     // コイン画像の読み込み
+    var coinTiles = this.map.addTilesetImage('coin');
+    this.coinLayer = this.map.createDynamicLayer('Coin', coinTiles, 0, 0);
+    this.physics.add.overlap(this.player, this.coinLayer);
+    this.coinLayer.setTileIndexCallback(17, this.collectCoin, this);
     
     
     
@@ -137,6 +171,14 @@ mainScene.createCoin = function() {
 
 mainScene.collectCoin = function(sprite, tile) {
     // プレイヤーがコインに衝突
+    this.coinLayer.removeTileAt(tile.x, tile.y);
+    this.score += 5;
+        if(this.score >= 300) {
+        this.scoreText.setText('Clear Score ' +this.score);
+    } else {
+    this.scoreText.setText('Score: ' + this.score);
+    }
+
     
     
     
@@ -146,12 +188,12 @@ mainScene.createEnemyGroup = function() {
     // 敵グループ作成
     this.enemies = this.physics.add.group();
     // 敵はマップと衝突する
-    this.physics.add.collider(this.enemies, this.groundLayer);
+
     // 敵はプレイヤーと衝突する
     this.physics.add.overlap(this.player, this.enemies, this.hitEnemy, null, this);
     // 1秒ごとに、新しい敵を作成する
     this.enemyTimer = this.time.addEvent({
-      delay: 1000,
+      delay: 100,
       callback: this.createEnemy,
       loop: true,
       callbackScope: this
@@ -160,16 +202,35 @@ mainScene.createEnemyGroup = function() {
 
 mainScene.createEnemy = function() {
     // 敵を作成
-    
-    
+    var enemyType = Phaser.Math.RND.pick(this.enemyData);
+ var enemyPositionX = Phaser.Math.RND.between(-600, 3300);
+ var enemy = this.enemies.create(enemyPositionX, 100, enemyType);
+         enemy.body.setAllowGravity(false); 
+ enemy.body.setSize(400,400);
+ enemy.setDisplaySize(80,80)
+ var speed = Phaser.Math.RND.pick(this.enemySpeed);
+    enemy.setVelocityY(speed);
     
 };
-
 mainScene.hitEnemy = function(player, enemy) {
+    enemy.destroy();
     // プレイヤーが敵に衝突
-    
-    
-    
+    if(this.life >=1) {
+        this.life--;
+        this.lifeText.setText('Life ' + this.life);
+    } else {
+    this.physics.pause();
+    this.player.setTint( 0xff0000 );
+    this.player.anims.stop();
+    this.isGameOver = true;
+    this.enemyTimer.remove();
+this.gameOverTimer = this.time.addEvent({
+    delay: 1000,
+    callback: this.gameOver,
+    loop: false,
+    callbackScope: this,
+});
+}
 };
 
 mainScene.createFireGroup = function() {
@@ -181,13 +242,29 @@ mainScene.createFireGroup = function() {
 
 mainScene.shoot = function() {
     // ファイヤーの作成
-    
-    
+    var x = this.player.body.center.x;
+    var y = this.player.body.center.y;
+    var fire = this.fireGroup.create(x, y, 'fire');
+    fire.body.setSize(20,20);
+    fire.setDisplaySize(80,80);
+    fire.body.setAllowGravity(false);
+    var speed = 600;
+    if( this.player.direction == 'left') {
+        fire.setAngle(90);
+        fire.setVelocityX(-speed);
+    } else {
+         fire.setAngle(-90);
+         fire.setVelocityX(speed);
+    }
     
 };
 
 mainScene.hitFire = function(enemy, fire) {
     // ファイヤーと敵が衝突
+    enemy.destroy();
+    fire.destroy();
+     this.score += 2
+     this.scoreText.setText('Score: ' + this.score);
     
     
     
