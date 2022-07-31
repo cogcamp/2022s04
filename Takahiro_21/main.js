@@ -121,7 +121,8 @@ mainScene.createPlayer = function() {
     this.player.setCollideWorldBounds(true);
     // プレイヤーが地面レイヤーと衝突する設定
     this.physics.add.collider(this.player, this.groundLayer);
-
+    
+    
     // プレイヤーの歩行アニメーション
     this.anims.create({
         key: 'walk',
@@ -191,14 +192,17 @@ mainScene.createEnemy = function() {
     // 敵を作成
     // 敵をランダムにする
     var enemyType = Phaser.Math.RND.pick(this.enemyData);
-    // 敵のx座標をランダムにする
+    // 敵のx, y座標をランダムにする
     var enemyPositionX = Phaser.Math.RND.between(500,2000);
-    var enemyPositionY = Phaser.Math.RND.between(100,2000)
+    var enemyPositionY = Phaser.Math.RND.between(100,2000);
     // 敵の作成
     var enemy = this.enemies.create(enemyPositionX, enemyPositionY, enemyType);
     enemy.body.setSize(350, 350);
     enemy.setDisplaySize(70, 70);
     var speed = Phaser.Math.RND.pick(this.enemySpeed);
+    if(speed == 0) {
+        speed = Phaser.Math.RND.pick(this.enemySpeed);
+    }
     enemy.setVelocityX(speed);
 };
 
@@ -212,7 +216,7 @@ mainScene.hitEnemy = function(player, enemy) {
     
     // ゲームオーバー画面を表示
     this.gameOverTimer = this.time.addEvent({
-        delay: 1000,
+        delay: 750,
         callback: this.gameOver,
         loop: false,
         callbackScope: this,
@@ -257,12 +261,12 @@ mainScene.hitFire = function(enemy, fire) {
     if(killEnemy == 3) {
         enemy.destroy();
         killEnemy = 0;
+        // 点数追加
+        this.score += 5;
+        this.scoreText.setText('Score: ' + this.score);
     }
     // ファイヤーの削除
     fire.destroy();
-    // 点数追加
-    this.score += 5;
-    this.scoreText.setText('Score: ' + this.score);
 };
 
 mainScene.hitFireGround = function(fire, ground) {
