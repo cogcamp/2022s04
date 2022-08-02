@@ -18,6 +18,8 @@ mainScene.config = function() {
     this.enemySpeed = [-200,-100,100,200];
     // カーソルを取得する
     this.cursors = this.input.keyboard.createCursorKeys();
+    // 弾数の初期値
+    this.firenumber = 100;
 };
 
 mainScene.create = function () {
@@ -141,15 +143,29 @@ mainScene.createPlayer = function() {
     this.cameras.main.startFollow(this.player);
 };
 
+var highScore = 0;
+
 mainScene.createUI = function() {
     // 画面右上にスコアを表示する
-    this.scoreText = this.add.text(600, 50, 'Score: ' + this.score, {
+    this.scoreText = this.add.text(500, 25, 'Score: ' + this.score, {
         fontSize: '30px Open Sans',
         fill: '#ff0000'
     });
     // 文字は固定表示（カメラに合わせて移動しない）
     this.scoreText.setScrollFactor(0);
     this.scoreText.setDepth(50);
+    this.fireText = this.add.text(50, 50, '残り' + this.firenumber + '発', {
+        fontSize: '30px Open Sans',
+        fill: '#ffffff'
+    });
+    this.fireText.setScrollFactor(0);
+    this.fireText.setDepth(50);
+    this.highScoreText = this.add.text(500, 60, 'Highscore:' + highScore, {
+        fontSize: '30px Open Sans',
+        fill: '#ff0000'
+    });
+    this.highScoreText.setScrollFactor(0);
+    this.highScoreText.setDepth(50);
 };
 
 mainScene.createCoin = function() {
@@ -170,6 +186,8 @@ mainScene.collectCoin = function(sprite, tile) {
     this.score += 10;
     // スコア表示を更新
     this.scoreText.setText('Score: ' + this.score);
+    highScore = Math.max( this.score, highScore );
+    this.highScoreText.setText( 'highScore: ' + highScore );
 };
 
 mainScene.createEnemyGroup = function() {
@@ -232,6 +250,9 @@ mainScene.createFireGroup = function() {
 };
 
 mainScene.shoot = function() {
+    if(this.firenumber == 0) {
+    return;
+    }
     // ファイヤーの作成
     var x = this.player.body.center.x
     var y = this.player.body.center.y
@@ -250,7 +271,10 @@ mainScene.shoot = function() {
         fire.setAngle(-90);
         fire.setVelocityX(speed);
     }
+    this.firenumber--;
+    this.fireText.setText('残り' + this.firenumber + '発');
 };
+
 
 var killEnemy = 0;
 
@@ -264,6 +288,8 @@ mainScene.hitFire = function(enemy, fire) {
         // 点数追加
         this.score += 5;
         this.scoreText.setText('Score: ' + this.score);
+        highScore = Math.max( this.score, highScore );
+        this.highScoreText.setText( 'highScore: ' + highScore );
     }
     // ファイヤーの削除
     fire.destroy();
