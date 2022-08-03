@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<script src="//cdn.jsdelivr.net/npm/phaser@3.21.0/dist/phaser.js"></script>
+<script src="//cdn.jsdelivr.net/npm/phaser@3.17.0/dist/phaser.js"></script>
 <script src="load.js"></script>
 <script src="start.js"></script>
 <script src="main.js"></script>
@@ -19,12 +19,12 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
+            gravity: {y: 500},
             debug: false
         }
     },
     scene: [loadScene, startScene, mainScene],
 };
-
 var game = new Phaser.Game(config);
 </script>
 </head>
