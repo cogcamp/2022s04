@@ -22,7 +22,7 @@ mainScene.create = function() {
     this.createBlocks();
     
     // ライフのテキスト表示
-    this.lifeText = this.add.text(30,20,'ライフ:'+ this.life,{
+    this.lifeText = this.add.text(30,20,'Life:'+ this.life,{
         font:'20px Open Sans',
         fill:'#ff0000'
     });
@@ -61,7 +61,7 @@ mainScene.config = function() {
     this.ballSpeedY = 950;
     
     // ライフ
-    this.life = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+    this.life = 10;
 };
 
 mainScene.createBall = function() {
@@ -97,7 +97,7 @@ mainScene.hitpaddle = function (paddle, ball) {
 
 mainScene.createBlocks = function() {
     // 横10列、縦6行並べる
-    var blockColors = ['blue1','blue1','blue1','yellow1','yellow1','yellow1'];
+    var blockColors = ['red1','yellow1','purple1','blue1','green1','silver1'];
     this.blocks = this.physics.add.staticGroup();
     for(var i = 0;i < 6;i++){
         for( var j = 0; j < 10;j++){
