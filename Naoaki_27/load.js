@@ -1,34 +1,34 @@
-// 画像読込のシーン
+
 var loadScene = new Phaser.Scene("loadScene");
 
-loadScene.preload = function() {
+loadScene.preload = function () {
     // スタート画像
-    this.load.image('gamestart', 'assets/images/gamestart.gif');
-    // ゲームオーバー画像
-    this.load.image('gameover', 'assets/images/gameover.png');
-    // マップデータ
-    this.load.tilemapTiledJSON('map', 'assets/data/map1.json');
-    // マップ画像
-    this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 70, frameHeight: 70});
-    // コイン画像
-    this.load.image('coin', 'assets/images/coin.png');
-    // プレイヤーデータ
-    this.load.atlas('player1', 'assets/images/player1.png', 'assets/data/player.json');
-    this.load.atlas('player2', 'assets/images/player2.png', 'assets/data/player.json');
-    this.load.atlas('player3', 'assets/images/player3.png', 'assets/data/player.json');
-    this.load.atlas('player4', 'assets/images/player4.png', 'assets/data/player.json');
-    this.load.atlas('player5', 'assets/images/player5.png', 'assets/data/player.json');
-    // 敵画像
-    this.load.image('enemy01', 'assets/images/enemy01.png');
-    this.load.image('enemy02', 'assets/images/enemy02.png');
-    this.load.image('enemy05', 'assets/images/enemy05.png');
-    this.load.image('enemy07', 'assets/images/enemy07.png');
-    this.load.image('enemy08', 'assets/images/enemy08.png');
-    // ファイヤ画像
-    this.load.image('fire', 'assets/images/fire.png');
+    this.load.image('startButton', 'assets/images/start.gif');
+
+    // パドル画像
+    this.load.image('paddle1','./assets/images/paddle1.png');
+    this.load.image('paddle2','./assets/images/paddle2.png');
+
+    // ブロック画像
+    this.load.image('red1','./assets/images/red1.png');
+    this.load.image('red2','./assets/images/red2.png');
+    this.load.image('blue1','./assets/images/blue1.png');
+    this.load.image('blue2','./assets/images/blue2.png');
+    this.load.image('green1','./assets/images/green1.png');
+    this.load.image('green2','./assets/images/green2.png');
+    this.load.image('yellow1','./assets/images/yellow1.png');
+    this.load.image('yellow2','./assets/images/yellow2.png');
+    this.load.image('purple1','./assets/images/purple1.png');
+    this.load.image('purple2','./assets/images/purple2.png');
+    this.load.image('silver1','./assets/images/silver1.png');
+    this.load.image('silver2','./assets/images/silver2.png');
+    
+    // ボール画像
+    this.load.image('ball1','./assets/images/ball1.png');
+    this.load.image('ball2','./assets/images/ball2.png');
 };
 
 loadScene.create = function() {
-    // 読み込み完了後にstartSceneを起動
+    // スタートシーンを自動的に開始します
     this.scene.start("startScene");
 };
