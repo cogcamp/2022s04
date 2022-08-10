@@ -180,7 +180,9 @@ mainScene.createCoin = function() {
 
 mainScene.collectCoin = function(sprite, tile) {
     // プレイヤーがコインに衝突
-    
+    this.coinLayer.removeTileAt(tile.x, tile.y);
+    this.score++;
+    this.scoreText.setText('Score: ' + this.score);
     
     
 };
@@ -208,8 +210,12 @@ mainScene.createEnemy = function() {
     //敵のX座標をランダムにする
     var enemyPositionX=Phaser.Math.RND.between(500,2000);
     //敵の作成
-    var enemy=this.enemies.create(enemyPositionX,100,
-    )
+    var enemy=this.enemies.create(enemyPositionX,100,enemyType
+    );
+    enemy.body.setSize(350,350);
+    enemy.setDisplaySize(70,70);
+    var speed = Phaser.Math.RND.pick(this.enemySpeed);
+    enemy.setVelocityX(speed);
     
     
     
