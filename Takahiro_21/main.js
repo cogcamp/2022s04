@@ -149,7 +149,7 @@ mainScene.createUI = function() {
     // 画面右上にスコアを表示する
     this.scoreText = this.add.text(500, 25, 'Score: ' + this.score, {
         fontSize: '30px Open Sans',
-        fill: '#ff0000'
+        fill: '#0067c0'
     });
     // 文字は固定表示（カメラに合わせて移動しない）
     this.scoreText.setScrollFactor(0);
@@ -160,6 +160,12 @@ mainScene.createUI = function() {
     });
     this.fireText.setScrollFactor(0);
     this.fireText.setDepth(50);
+    this.fireText2 = this.add.text(50, 71, "", {
+        fontSize: '30px Open Sans',
+        fill: '#fff100'
+    });
+    this.fireText.setScrollFactor(0);
+    this.fireText.setDepth(100);
     this.highScoreText = this.add.text(500, 60, 'Highscore:' + highScore, {
         fontSize: '30px Open Sans',
         fill: '#ff0000'
@@ -273,6 +279,10 @@ mainScene.shoot = function() {
     }
     this.firenumber--;
     this.fireText.setText('残り' + this.firenumber + '発');
+    if(this.firenumber <= 10){
+        this.fireText.setText('');
+        this.fireText2.setText('残り' + this.firenumber + '発');
+    }
 };
 
 
